@@ -1,0 +1,16 @@
+FROM node as build
+WORKDIR /app
+COPY ./package.json .
+RUN npm install
+COPY . .
+EXPOSE 3000
+ARG REACT_APP_ENV
+ARG REACT_APP_RANDOM_TEXT
+ENV REACT_APP_ENV=$REACT_APP_ENV
+ENV REACT_APP_RANDOM_TEXT=$REACT_APP_RANDOM_TEXT
+RUN rpm run build 
+
+# Stage 2
+
+FROM nginx
+COPY --from=build /app/build /usr/share/nginx/html

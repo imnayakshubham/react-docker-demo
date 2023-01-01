@@ -1,0 +1,37 @@
+docker build . ==> to create docker image
+
+docker image ls  ==> To view Docker Images
+
+docker image  rm image_id ==> Delete The Docker image with the provide image_id
+
+docker build  -t react-app-image . ===> Create an docker image with a tag name react-app-image
+
+docker run -d --name my-react-app react-app-image  ==> To create a docker container named my-react-app for react-app-image.(-d To start a container in detached mode)
+
+docker ps ==>  which is available inside the container, is used to see the status of the process
+
+The EXPOSE 3000 in DockerFile is just for documentation purpose it wont expose to PORT 3000. we have to expose the traffic to our container manully.
+
+docker run -d -p 3000:3000  --name my-react-app react-app-image  ==> here 3000 on the right hand side refers to what port we are going send the traffic to our container, on left its for local machine. i.e if any body is sending the traffic to PORT 5000 on internet it will be transfered to PORT 3000 container.
+
+docker exec -it my-react-app bash  ==> open dockers bash terminal
+
+cat file_Name ===> to react the file in bash
+
+docker run -v ourLocalDirectiory: containerDirectory -d -p 3000:3000 --name my-react-app react-app-image ==> To sync the latest code with container code so that we dont have to delete image manully or rebuild it when anything changes
+[ourLocalDirectiory,containerDirectory ==> must be full path]
+for linux/mac it would be ==> docker run -v $(pwd)/src:/app/src -d -p 3000:3000  --name my-react-app react-app-image
+
+docker run -v $(pwd)/src:/app/src:ro -d -p 3000:3000 --name my-react-app react-app-image [Here -v represents volume and ro is read only bind mount its added to containers directory to prevent write operation perform beacuse bind mount is two way process]
+
+docker run --env-file ./.env  -v $(pwd)/src:/app/src -d -p 3000:3000 --name my-react-app react-app-image  ==> to add env file
+
+docker-compose up -d ==> create a new image everytime
+docker-compose down  ===> to stop and delete the docker container
+
+docker-compose up -d --build ===> docker-compose just check for docker image it does not checks for whether its updated or not so,--build is to redeployed it.
+
+
+when changing the the name from Dockerfile to Dockerfile.dev we have to make some changes in build part of docker-compose by adding context and dockerfile key.
+
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d --build ==> Here -f represents file name this command will create the development env. container and docker-compose.yml is a shared file.

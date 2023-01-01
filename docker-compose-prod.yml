@@ -1,0 +1,15 @@
+version: '3'
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        - REACT_APP_ENV=DEVELOPMENT
+        - REACT_APP_RANDOM_TEXT=HELLO DOCKER
+    ports:
+      - "8080:80"
+    # environment:
+    #   - name=value
+    env_file:
+      - ./.env
